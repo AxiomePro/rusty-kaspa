@@ -152,6 +152,9 @@ pub mod parents_by_level_format {
             }
         }
 
+        cumulative = cumulative.checked_add(current_len).ok_or_else(|| S::Error::custom("cumulative length overflow"))?;
+        runs.push(Run { cumulative, vec: current_vec });
+
         let mut seq = serializer.serialize_seq(Some(runs.len()))?;
         for run in &runs {
             let elem = (run.cumulative, run.vec);
